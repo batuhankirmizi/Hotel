@@ -116,7 +116,7 @@ bool Hotel::contains_food(string& name) const {
 }
 
 bool Hotel::contains_food(const string& name) const {
-	return get_food(name) != nullptr ? contains(*get_food(name)) : false;
+	return get_food(name) ? contains(*get_food(name)) : false;
 	
 }
 
@@ -216,7 +216,7 @@ void Hotel::remove_animal(string name) const {
 }
 
 bool Hotel::remove_animal(Animal& animal) const {
-	if(!contains(animal)) return false;
+	if(!contains_animal(animal.get_name())) return false;
 
 	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); ++iter)
 		if (*iter == &animal) {
@@ -258,7 +258,7 @@ void Hotel::train(string name) const {
 	if (is_empty())
 		cout << "Hotel is empty. Cannot train any animal." << endl;
 	else {
-		if(contains(*get_animal(name)))
+		if(contains_animal(name))
 			get_animal(name)->do_exercise();
 		else cout << "Cannot rest " << name << ". Hotel does not contain such an aniaml." << endl;
 	}
@@ -278,24 +278,21 @@ void Hotel::rest(string name) const {
 	if (is_empty())
 		cout << "Hotel is empty. Cannot rest any animal." << endl;
 	else {
-		if (contains(*get_animal(name)))
-			get_animal(name)->rest();
+		if (contains_animal(name)) get_animal(name)->rest();
 		else cout << "Cannot rest " << name << ". Hotel does not contain such an aniaml." << endl;
 	}
 }
 
 void Hotel::register_food(string name, string applicable_animals) const {
-	Food* f = new Food(name);
-	if (contains(*f))
-		f = get_food(name);
+	Food *f = contains_food(name) ? get_food(name) : new Food(name);
 
-	// TODO: fix the errors
 	string to_add = "";
 	applicable_animals += " ";
 	for (unsigned i = 0; i < applicable_animals.length(); ++i) {
 		if (applicable_animals.at(i) == ' ') {
-			f->add_applicable_animal(to_add);
-			if (contains(*get_animal(to_add)))
+			if(!f->is_applicable_to(to_add))
+				f->add_applicable_animal(to_add);
+			if (!contains_animal(name))
 				f->add_applicable_animal(get_animal(to_add));
 			to_add = "";
 			continue;
@@ -307,13 +304,12 @@ void Hotel::register_food(string name, string applicable_animals) const {
 }
 
 void Hotel::remove_food(const string name) const {
-	Food food(name);
-	if (!contains(food)) {
+	if (!contains_food(name)) {
 		cout << name << " could not removed. Hotel does not contain such food.";
 		return;
 	}
 
-	cout << name << " has " << (remove_food(food) ? "" : "not") << " been removed from the hotel." << endl;
+	cout << name << " has " << (remove_food(*get_food(name)) ? "" : "not") << " been removed from the hotel." << endl;
 }
 
 void Hotel::set_capacity(const int capacity) {
@@ -322,29 +318,29 @@ void Hotel::set_capacity(const int capacity) {
 
 void Hotel::transfer_animal(string name, const int room_number) const {
 	if (room_number < 0) {
-		cout << "minus room number" << endl;
+		cout << "Cannot transfer animal " << name << ". Room number cannot be negative." << endl;
 		return;
 	}
-	if (contains(*get_animal(name)))
+	if (contains_animal(name))
 		transfer_animal(*get_animal(name), room_number);
 	else
 		cout << "Cannot transfer animal " << name << ". Hotel does not contain animal." << endl;
 }
 
 void Hotel::modify(string name, const uint8_t age) const {
-	if(!contains(*get_animal(name))) {
+	if(!contains_animal(name)) {
 		cout << "Unable to modify age of " << name << ". Hotel does not contain such an animal." << endl;
 		return;
 	}
 
-	if (contains(*get_animal(name)))
+	if (!contains_animal(name))
 		get_animal(name)->set_age(age);
 	else
 		cout << "Cannot modify the age of animal " << name << ". Hotel does not contain such an animal." << endl;
 }
 
 void Hotel::modify(string name, const bool is_ill, const bool is_tired) const {
-	if (contains(*get_animal(name))) {
+	if (contains_animal(name)) {
 		get_animal(name)->set_is_ill(is_ill);
 		get_animal(name)->set_is_tired(is_tired);
 	} else {
