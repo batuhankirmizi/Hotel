@@ -18,20 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Animal.h" />
-    <ClInclude Include="Food.h" />
-    <ClInclude Include="Hotel.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Animal.cpp" />
-    <ClCompile Include="Food.cpp" />
-    <ClCompile Include="Hotel.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{81DE8013-2665-4DF7-9690-A0AB46B79C10}</ProjectGuid>
+    <ProjectGuid>{7F3B1EE9-4FBC-486E-A374-AE09C5BB6AA6}</ProjectGuid>
     <RootNamespace>Hotel</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -121,6 +110,20 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\Animal.cpp" />
+    <ClCompile Include="Sources\Food.cpp" />
+    <ClCompile Include="Sources\Hotel.cpp" />
+    <ClCompile Include="Sources\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\Animal.h" />
+    <ClInclude Include="Headers\Food.h" />
+    <ClInclude Include="Headers\Hotel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Additionals\ClassDiagram.cd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

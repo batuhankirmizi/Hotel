@@ -1,7 +1,5 @@
-#include "Animal.h"
-#include "Food.h"
-#include <vector>
-#include <algorithm>
+#include "../Headers/Animal.h"
+#include "../Headers/Food.h"
 
 ostream& operator<<(ostream& os, const Animal& animal) {
 	os << "name: " << animal.name << "\nage: " << animal.age << "\nwill be staying between: " << animal.dates <<

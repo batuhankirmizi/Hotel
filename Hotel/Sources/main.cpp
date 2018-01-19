@@ -1,4 +1,4 @@
-﻿#include "Hotel.h"
+﻿#include "../Headers/Hotel.h"
 
 int main(int argc, char* argv[]) {
 	Hotel* h = new Hotel(4);
@@ -32,8 +32,8 @@ int main(int argc, char* argv[]) {
 	h->register_food("Strawberry", "Giraffe Elephant"); // ✔ . . . food will be registered
 	cout << endl << *h << endl;
 
-	cout << "Hotel contains animal Tiger: " << h->contains("Tiger") << endl;
-	cout << "Hotel contains animal Cat: " << h->contains("Cat") << endl;
+	cout << "Hotel contains animal Tiger: " << h->contains_animal("Tiger") << endl;
+	cout << "Hotel contains animal Cat: " << h->contains_animal("Cat") << endl;
 	cout << "Animal count: " << h->animal_count() << endl;
 	cout << "Hotel empty: " << h->is_empty() << endl;
 	cout << "h[0]: " << (*h)[0] << endl;
@@ -56,8 +56,8 @@ int main(int argc, char* argv[]) {
 	h2.print_animal_memory_addresses(); // 17368
 	h2.print_food_memory_addresses(); // 400, 640
 
-	cout << "Hotel has food pineapple? " << h2.has_food("Pineapple") << endl;
-	cout << "Hotel has food peach? " << h2.has_food("Peach") << endl;
+	cout << "Hotel has food pineapple? " << h2.contains_food("Pineapple") << endl;
+	cout << "Hotel has food peach? " << h2.contains_food("Peach") << endl;
 
 	h->feed_all();
 	h2.feed_animal("Dog");

@@ -24,7 +24,7 @@ class Hotel {
 	void clear() const;
 
 	// register food to the hotel
-	void register_food(Food* food) const;
+	void register_food(Food*) const;
 
 	// add new animal
 	void add_animal(Animal& animal) const;
@@ -44,10 +44,16 @@ class Hotel {
 	// transfers the animal into another room
 	bool transfer_animal(Animal& animal, int) const;
 
-	// Return the animal which has the given name
+	// Return pointer to the animal which has the given name
 	Animal* get_animal(string& name) const;
 
-	// Return the food which has the given name
+	// Return pointer to the animal which has the given const name
+	Animal* get_animal(const string& name) const;
+
+	// Return pointer to the food which has the given name
+	Food* get_food(string& name) const;
+
+	// Return pointer to the food which has the given const name
 	Food* get_food(const string& name) const;
 public:
 	Hotel(); // default constructor
@@ -65,7 +71,11 @@ public:
 	                const unsigned happiness_level,
 	                const bool is_ill, const bool is_tired) const;
 
-	bool contains(const string& name) const; // check if the hotel contains such an animal or not
+	bool contains_animal(const string& name) const; // check if the hotel contains such an animal or not
+
+	bool contains_food(string& name) const; // check if the hotel contains such food or not
+
+	bool contains_food(const string& name) const; // check if the hotel contains such food or not
 
 	uint32_t animal_count() const; // returns the count of animals in the hotel
 
@@ -85,7 +95,9 @@ public:
 
 	bool feed_all() const; // feed all the animals inside the hotel
 
-	bool feed_animal(const string name) const; // feed an animal
+	bool feed_animal(string name) const; // feed an animal
+	
+	bool feed_animal(string name, const string food_name) const; // feed an animal with the given food name
 
 	void register_food(string name, string applicable_animals) const; // register a new food to the hotel
 
@@ -98,8 +110,6 @@ public:
 	void modify(string name, uint8_t age) const; // change the age of the animal
 
 	void modify(string name, bool is_ill, bool is_tired) const; // change the illness and tiredness of the animal
-
-	bool has_food(const string food_name) const; // checks if the hotel has the food or not
 
 	void print_animal_memory_addresses() const;
 	void print_food_memory_addresses() const;

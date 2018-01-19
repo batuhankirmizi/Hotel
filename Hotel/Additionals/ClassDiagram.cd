@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Animal">
+    <Position X="0.75" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAFAADQMQICAAAAAMSAAIAAEAAIApAIgGIiCAAI=</HashCode>
+      <FileName>Animal.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Food">
+    <Position X="5.75" Y="2.25" Width="2.75" />
+    <AssociationLine Name="animals" Type="std::vector&lt;_Ty, _Alloc&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="2.25" />
+        <Point X="6.75" Y="1.846" />
+        <Point X="6.75" Y="1.846" />
+        <Point X="6.75" Y="1.441" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="applicable_animals" Type="std::vector&lt;_Ty, _Alloc&gt;" FixedFromPoint="true">
+      <Path>
+        <Point X="7.625" Y="2.25" />
+        <Point X="7.625" Y="1.441" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.483" Y="0.121" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAABAAAAAAAAAAAQAAEAAEAIAAAACAAoAAIAA=</HashCode>
+      <FileName>Food.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="animals" />
+      <Field Name="applicable_animals" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Hotel">
+    <Position X="10" Y="0.5" Width="2.5" />
+    <AssociationLine Name="foods" Type="std::vector&lt;_Ty, _Alloc&gt;">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.121" Y="-0.271" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AFCAAEACICAKARAwQgMCKQAAUBGAAAAEBHQgAAAAABA=</HashCode>
+      <FileName>Hotel.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="foods" />
+      <Field Name="animals" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="std::vector&lt;_Ty, _Alloc&gt;" Collapsed="true">
+    <Position X="5.75" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>A0IAEIEqCrBsEABAAOMIAAAyAAUEQBIAhQkwggAFUkI=</HashCode>
+      <FileName>d:\Visual Studio\VC\Tools\MSVC\14.12.25827\include\vector</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
