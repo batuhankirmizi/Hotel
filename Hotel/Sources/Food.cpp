@@ -75,13 +75,14 @@ bool Food::operator==(const Food& food) const {
 
 void Food::operator delete(void*) { }
 
-ostream& operator<<(ostream& os, const Food& food) {
+ostream& operator<<(ostream& os, const Food& food) {	
 	os << food.get_name() << ": ";
-	for(vector<Animal*>::const_iterator iter = food.animals->begin(); iter != food.animals->end(); iter++) {
-		os << (*iter)->get_name();
-		if(iter != food.animals->end() - 1)
+	for(vector<string>::const_iterator iter = food.applicable_animals->begin(); iter != food.applicable_animals->end(); iter++) {
+		os << *iter;
+		if(iter != food.applicable_animals->end() - 1)
 			os << ", ";
 	}
 	os << endl;
+
 	return os;
 }

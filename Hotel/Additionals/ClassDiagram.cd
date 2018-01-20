@@ -4,59 +4,74 @@
     <Position X="0.75" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAEAFAADQMQICAAAAAMSAAIAAEAAIApAIgGIiCAAI=</HashCode>
-      <FileName>Animal.h</FileName>
+      <FileName>Headers\Animal.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Food">
-    <Position X="5.75" Y="2.25" Width="2.75" />
-    <AssociationLine Name="animals" Type="std::vector&lt;_Ty, _Alloc&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="6.75" Y="2.25" />
-        <Point X="6.75" Y="1.846" />
-        <Point X="6.75" Y="1.846" />
-        <Point X="6.75" Y="1.441" />
-      </Path>
-    </AssociationLine>
+    <Position X="7.25" Y="2.25" Width="2.75" />
     <AssociationLine Name="applicable_animals" Type="std::vector&lt;_Ty, _Alloc&gt;" FixedFromPoint="true">
       <Path>
-        <Point X="7.625" Y="2.25" />
-        <Point X="7.625" Y="1.441" />
+        <Point X="9.125" Y="2.25" />
+        <Point X="9.125" Y="1.441" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.483" Y="0.121" />
+        <Position X="-1.375" Y="0.129" />
       </MemberNameLabel>
     </AssociationLine>
+    <AssociationLine Name="animals" Type="std::vector&lt;_Ty, _Alloc&gt;" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.25" Y="2.25" />
+        <Point X="8.25" Y="1.846" />
+        <Point X="8.25" Y="1.846" />
+        <Point X="8.25" Y="1.441" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AEAAAAAAABAAAAAAAAAAAQAAEAAEAIAAAACAAoAAIAA=</HashCode>
-      <FileName>Food.h</FileName>
+      <HashCode>AECAAAAAABAAAAAAAAAAARAAEAAEAIAAAACgAoAAIAA=</HashCode>
+      <FileName>Headers\Food.h</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="animals" />
       <Field Name="applicable_animals" />
+      <Field Name="animals" />
     </ShowAsAssociation>
   </Class>
   <Class Name="Hotel">
-    <Position X="10" Y="0.5" Width="2.5" />
+    <Position X="12" Y="0.5" Width="2.5" />
+    <AssociationLine Name="animals" Type="std::vector&lt;_Ty, _Alloc&gt;">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.143" Y="0.243" />
+      </MemberNameLabel>
+    </AssociationLine>
     <AssociationLine Name="foods" Type="std::vector&lt;_Ty, _Alloc&gt;">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.121" Y="-0.271" />
+        <Position X="0.154" Y="-0.471" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AFCAAEACICAKARAwQgMCKQAAUBGAAAAEBHQgAAAAABA=</HashCode>
-      <FileName>Hotel.h</FileName>
+      <HashCode>AFCAAEgCICAKARAwYgMCIQAAUBGAAAIEBHRgAEAAQBA=</HashCode>
+      <FileName>Headers\Hotel.h</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="foods" />
       <Field Name="animals" />
+      <Field Name="foods" />
     </ShowAsAssociation>
   </Class>
   <Class Name="std::vector&lt;_Ty, _Alloc&gt;" Collapsed="true">
-    <Position X="5.75" Y="0.75" Width="2.75" />
+    <Position X="7.25" Y="0.75" Width="2.75" />
     <TypeIdentifier>
       <HashCode>A0IAEIEqCrBsEABAAOMIAAAyAAUEQBIAhQkwggAFUkI=</HashCode>
       <FileName>d:\Visual Studio\VC\Tools\MSVC\14.12.25827\include\vector</FileName>
     </TypeIdentifier>
+  </Class>
+  <Class Name="Room">
+    <Position X="3.5" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAACQAAARBMAAAAAEBCAAAAEAAAgAAAAAAA=</HashCode>
+      <FileName>Headers\Room.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="animals" />
+    </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

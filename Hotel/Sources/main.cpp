@@ -8,6 +8,12 @@ int main(int argc, char* argv[]) {
 	h->train_all();
 	h->feed_animal("Giraffe");
 
+	h->register_room(108);
+	h->register_room(108);
+	h->register_room(112);
+	h->register_room(123);
+	h->register_room(136);
+	h->register_room(141);
 	h->add_animal("", "15/12/2017 - 08/01/2018", 15, 108); // X  . . . name is not valid
 	h->add_animal("Dog", "15/12/2017 - 08/01/2018", 15, 108, 3, false, false); // ✔ . . .
 	h->add_animal("Cat", "21/12/2017 - 27/01/2018", 14, 112, 5, false, false); // ✔ . . .
@@ -16,6 +22,7 @@ int main(int argc, char* argv[]) {
 	h->add_animal("Snake", "21/01/2018 - 26/01/2018", 1, 136, 4, false, true); // ✔ . . .
 	h->add_animal("Cat", "14/01/2018 - 05/04/2018", 9, 137, 4, true, true); // X  . . . has the same animal
 	h->add_animal("Aslan", "08/04/2018 - 05/08/2018", 11, 141, 5, false, false); // X  . . . capacity reached
+	h->add_animal("Gorilla", "14/08/2018 - 21/08/2018", 14, 666, 5, false, false); // X  . . . hotel does not have such a room
 
 	cout << endl << *h << endl;
 
@@ -27,6 +34,7 @@ int main(int argc, char* argv[]) {
 	h->register_food("Pineapple", "Tiger Elephant"); // ✔ . . . food will be updated
 	h->register_food("Lemon", "Cat Lion"); // ✔ . . . food will be registered
 	h->register_food("Ginger", "Cat Snake"); // ✔ . . . food will be registered
+	h->register_room(1441);
 	h->add_animal("Elephant", "08/04/2018 - 05/08/2018", 20, 1441, 5, false, false);
 	h->register_food("Strawberry", "Lion Tiger"); // ✔ . . . food will be registered
 	h->register_food("Strawberry", "Giraffe Elephant"); // ✔ . . . food will be registered
@@ -40,6 +48,7 @@ int main(int argc, char* argv[]) {
 	cout << "h[1]: " << h->operator[](1) << endl;
 	cout << "h[2]: " << h->operator[](2) << endl;
 	cout << "h[3]: " << h->operator[](3) << endl;
+	cout << "h[21]: " << h->operator[](21) << endl;
 	Hotel h2(*h);
 	h2 = *h;
 	h->operator-=(4);
@@ -51,6 +60,7 @@ int main(int argc, char* argv[]) {
 	h2--;
 	--h2;
 	cout << h2 << endl;
+	h2.register_room(504);
 	h2.add_animal("Giraffe", "15/02/2018 - 26/05/2021", 6, 504);
 
 	h2.print_animal_memory_addresses(); // 17368
@@ -76,6 +86,7 @@ int main(int argc, char* argv[]) {
 	int a = -5;
 	h2.transfer_animal("Dog", a);
 	h2.transfer_animal("Dog", 504);
+	h2.transfer_animal("Dog", 666);
 	h2.transfer_animal("ABC", 1700);
 	h2.transfer_animal("ABC", 504);
 	h2.transfer_animal("", 504);
@@ -84,6 +95,7 @@ int main(int argc, char* argv[]) {
 	h2.display_info("Dog");
 	h2.display_info("");
 
+	h2.register_room(6007);
 	h2.add_animal("Animal", "15/02/2018 - 26/05/2021", 6, 6007, 0, false, false);
 	h2.register_food("ASD", "Animal");
 	cout << h2 << endl;

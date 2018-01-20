@@ -27,7 +27,7 @@
     <ClCompile Include="Sources\main.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="Room.cpp">
+    <ClCompile Include="Sources\Room.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClInclude Include="Headers\Hotel.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Room.h">
+    <ClInclude Include="Headers\Room.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>

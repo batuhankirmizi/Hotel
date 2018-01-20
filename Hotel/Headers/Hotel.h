@@ -4,24 +4,29 @@
 
 #include "Animal.h"
 #include "Food.h"
+#include "Room.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
 
+class Room;
 using namespace std;
 
 class Hotel {
 	// vector which contains animals
-	vector<Animal*>* animals;
+	vector<Animal*> *animals;
 
 	// vector which contains all the foods inside the hotel
-	vector<Food*>* foods;
+	vector<Food*> *foods;
 
-	// initialize animals and foods vectors
-	void init();
+	// vector which contains all the rooms inside the hotel
+	vector<Room*> *rooms;
 
 	// animal capacity of this hotel
 	unsigned int capacity;
+
+	// initialize animals and foods vectors
+	void init();
 
 	// clear all the elements
 	void clear() const;
@@ -32,17 +37,23 @@ class Hotel {
 	// register food to the hotel
 	void register_food(Food*) const;
 
+	// register food to the hotel
+	void register_room(Room*) const;
+
 	// add new animal
-	void add_animal(Animal& animal) const;
+	void add_animal(Animal&) const;
 
 	// removes an animal from the hotel
-	bool remove_animal(Animal& animal) const;
+	bool remove_animal(Animal&) const;
 
 	// checks if the hotel contains the animal or not
-	bool contains(Animal& animal) const;
+	bool contains(Animal&) const;
 
 	// checks if the hotel contains the food or not
-	bool contains(Food& food) const;
+	bool contains(Food&) const;
+
+	// checks if the hotel contains the room or not
+	bool contains(Room&) const;
 
 	// removes the food from hotel
 	bool remove_food(Food& food) const;
@@ -61,13 +72,12 @@ class Hotel {
 
 	// Return pointer to the food which has the given const name
 	Food* get_food(const string& name) const;
+
+	// Return pointer to the room which has the given number
+	Room* get_room(int number) const;
 public:
 	Hotel(); // default constructor
 	explicit Hotel(unsigned int); // constructor with only capacity
-	explicit Hotel(vector<Animal*>&); // constructor with animals
-	explicit Hotel(vector<Food*>&); // constructor with foods
-	Hotel(vector<Animal*>&, vector<Food*>&); // constructor with animals and foods
-	Hotel(vector<Animal*>&, int); // constructor with both properties
 	Hotel(const Hotel&); // copy constructor
 	~Hotel(); // destructor
 
@@ -81,6 +91,8 @@ public:
 	bool contains_food(string&) const; // checks if the hotel contains such food or not
 
 	bool contains_food(const string&) const; // checks if the hotel contains such food or not
+
+	bool contains_room(int) const; // checks if the hotel contains such food or not
 
 	bool contains_food_for_animal(const string& animal_name) const; // checks if the hotel contains food for the given animal
 
@@ -108,9 +120,13 @@ public:
 
 	void register_food(string name, string applicable_animals) const; // register a new food to the hotel
 
+	void register_room(int) const; // register a new room to the hotel
+
+	void register_room(int, int) const; // register a new room to the hotel
+
 	void remove_food(string name) const; // removes the food from hotel
 
-	void set_capacity(int capacity); // setter to variable capacity
+	void set_capacity(unsigned capacity); // setter to variable capacity
 
 	void display_info(string name) const; // displays the info about the given animal
 

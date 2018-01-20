@@ -111,17 +111,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Room.cpp" />
     <ClCompile Include="Sources\Animal.cpp" />
     <ClCompile Include="Sources\Food.cpp" />
     <ClCompile Include="Sources\Hotel.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\Room.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers\Animal.h" />
     <ClInclude Include="Headers\Food.h" />
     <ClInclude Include="Headers\Hotel.h" />
-    <ClInclude Include="Room.h" />
+    <ClInclude Include="Headers\Room.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Additionals\ClassDiagram.cd" />

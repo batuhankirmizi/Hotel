@@ -57,15 +57,15 @@ bool Animal::feed(Food& food) {
 
 void Animal::do_exercise() {
 	if(happiness_level <= 2) {
-		cout << "Cannot make exercise. Animal " << name << " is unhappy." << endl;
+		cout << "Cannot make exercise. " << name << " is unhappy." << endl;
 		return;
 	}
 
 	if(is_tired) {
-		cout << "Animal " << name << " cannot make exercise. Animal is tired." << endl;
+		cout << name << " cannot make exercise. " << name << " is tired." << endl;
 		return;
 	}
-	cout << "Animal " << name << " has been exercising." << endl;
+	cout << name << " has been exercising." << endl;
 	is_tired = true;
 	decrease_happiness();
 }
@@ -91,8 +91,6 @@ bool Animal::operator==(const Animal& animal) const {
 }
 
 Animal& Animal::operator=(const Animal& animal) {
-	/**this = Animal(animal.get_name(), animal.get_dates(), animal.get_age(), animal.get_room_number(), animal.get_happiness_level(), animal.isIll(), animal.isTired());
-	return *this;*/
 	if(this != &animal) {
 		name = animal.get_name();
 		dates = animal.get_dates();

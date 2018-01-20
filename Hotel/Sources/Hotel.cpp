@@ -17,6 +17,8 @@ void Hotel::remove_all_animals() const {
 	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); iter++) {
 		for (vector<Food*>::iterator it = foods->begin(); it != foods->end(); it++)
 			(*it)->remove_applicable_animal(*iter);
+		for(vector<Room*>::iterator it = rooms->begin(); it != rooms->end(); it++)
+			(*it)->remove_animal((*iter)->get_name());
 		delete *iter;
 	}
 	animals->clear();
@@ -25,6 +27,12 @@ void Hotel::remove_all_animals() const {
 void Hotel::register_food(Food* food) const {
 	if (!contains(*food))
 		foods->push_back(food);
+}
+
+void Hotel::register_room(Room *room) const {
+	if(!room) return;
+
+	rooms->push_back(room);
 }
 
 void Hotel::add_animal(Animal& animal) const {
@@ -36,45 +44,25 @@ void Hotel::add_animal(Animal& animal) const {
 		if ((*iter)->is_applicable_to(animal.get_name()))
 			(*iter)->add_applicable_animal(&animal);
 	}
+
+	// add animal to the room
+	for(vector<Room*>::iterator iter = rooms->begin(); iter != rooms->end(); iter++) {
+		if((*iter)->get_number() == animal.get_room_number())
+			(*iter)->add_animal(&animal);
+	}
 }
 
 
 Hotel::Hotel() : capacity(10) {
 	animals = new vector<Animal*>;
 	foods = new vector<Food*>;
+	rooms = new vector<Room*>;
 }
 
 Hotel::Hotel(const unsigned int capacity) : capacity(capacity) {
 	animals = new vector<Animal*>;
 	foods = new vector<Food*>;
-}
-
-Hotel::Hotel(vector<Animal*>& anims) : capacity(10) {
-	for (vector<Animal*>::iterator iter = anims.begin(); iter != anims.end(); ++iter)
-		animals->push_back(*iter);
-	foods = new vector<Food*>;
-}
-
-Hotel::Hotel(vector<Food*>& f) : capacity(10) {
-	for (vector<Food*>::iterator iter = f.begin(); iter != f.end(); ++iter)
-		foods->push_back(*iter);
-	animals = new vector<Animal*>;
-}
-
-Hotel::Hotel(vector<Animal*>& anims, vector<Food*>& f) {
-	for (vector<Animal*>::iterator iter = anims.begin(); iter != anims.end(); ++iter)
-		animals->push_back(*iter);
-	for (vector<Food*>::iterator iter = f.begin(); iter != f.end(); ++iter)
-		foods->push_back(*iter);
-}
-
-Hotel::Hotel(vector<Animal*>& anims, const int capacity) : capacity(capacity) {
-	for (vector<Animal*>::iterator iter = anims.begin(); iter != anims.end(); ++iter)
-		animals->push_back(*iter);
-	foods = new vector<Food*>;
-
-	if (capacity < 0)
-		this->capacity = 0;
+	rooms = new vector<Room*>;
 }
 
 Hotel::Hotel(const Hotel& hotel) {
@@ -89,42 +77,48 @@ Hotel::~Hotel() {
 }
 
 void Hotel::add_animal(const string& name, const string& dates, const unsigned age, const unsigned room_number) const {
-	Animal* animal = new Animal(name, dates, age, room_number);
 	if (name.empty()) {
 		cout << "An animal has to have a name. Please enter a proper name." << endl;
 		return;
 	}
 
-	if (!contains(*animal))
-		if (!room_occupied(animal->get_room_number()))
-			if (animal_count() < capacity)
-				add_animal(*animal);
+	if(!contains_animal(name))
+		if(contains_room(room_number))
+			if(!room_occupied(room_number))
+				if(animal_count() < capacity) {
+					Animal* animal = new Animal(name, dates, age, room_number);
+					add_animal(*animal);
+				} else
+					cout << "Cannot add animal " << name << " to the hotel. Capacity reached.\n";
 			else
-				cout << "Cannot add animal " << name << " to the hotel. Capacity reached.\n";
+				cout << "Cannot add animal " << name << " to the hotel. Room occupied between the given dates.\n";
 		else
-			cout << "Cannot add animal " << name << " to the hotel. Room occupied between the given.\n";
+			cout << "Cannot add animal to the room with the number " << room_number << ". Please register the room.\n";
 	else
-		cout << "Cannot add animal " << name << " to the hotel. This hotel already contains this animal\n";
+		cout << "Cannot add animal " << name << " to the hotel. This hotel already contains this animal.\n";
 }
 
 void Hotel::add_animal(const string& name, const string& dates, const unsigned age, const unsigned room_number,
 					   const unsigned happiness_level, const bool is_ill, const bool is_tired) const {
-	if (name.empty()) {
+	if(name.empty()) {
 		cout << "An animal has to have a name. Please enter a proper name." << endl;
 		return;
 	}
 
-	Animal* animal = new Animal(name, dates, age, room_number, happiness_level, is_ill, is_tired);
-	if (!contains(*animal))
-		if (!room_occupied(animal->get_room_number()))
-			if (animal_count() < capacity)
-				add_animal(*animal);
+	if(!contains_animal(name))
+		if(contains_room(room_number))
+			if(!room_occupied(room_number))
+				if(animal_count() < capacity) {
+					Animal* animal = new Animal(name, dates, age, room_number, happiness_level, is_ill, is_tired);
+					add_animal(*animal);
+				} else
+					cout << "Cannot add animal " << name << " to the hotel. Capacity reached.\n";
 			else
-				cout << "Cannot add animal " << name << " to the hotel. Capacity reached.\n";
+				cout << "Cannot add animal " << name << " to the hotel. Room occupied between the given dates.\n";
 		else
-			cout << "Cannot add animal " << name << " to the hotel. Room occupied between the given dates.\n";
+			cout << "Cannot add animal to the room with the number " << room_number << ". Please register the room.\n";
 	else
-		cout << "Cannot add animal " << name << " to the hotel. This hotel already contains this animal\n";
+		cout << "Cannot add animal " << name << " to the hotel. This hotel already contains this animal.\n";
 }
 
 bool Hotel::contains_animal(const string& name) const {
@@ -138,6 +132,14 @@ bool Hotel::contains_food(string& name) const {
 bool Hotel::contains_food(const string& name) const {
 	return get_food(name) ? contains(*get_food(name)) : false;
 
+}
+
+bool Hotel::contains_room(const int room_number) const {
+	if(room_number < 0) return false;
+
+	for(vector<Room*>::const_iterator iter = rooms->begin(); iter != rooms->end(); iter++)
+		if((*iter)->get_number() == room_number) return true;
+	return false;
 }
 
 bool Hotel::contains_food_for_animal(const string& animal_name) const {
@@ -158,12 +160,29 @@ bool Hotel::remove_food(Food& food) const {
 
 bool Hotel::transfer_animal(Animal& animal, const int room_number) const {
 	try {
-		if (room_occupied(room_number))
-			throw - 1;
+		if(!contains_room(room_number))
+			throw - 2;
+		if(room_occupied(room_number))
+			throw -1;
+
+		Room *old_room = get_room(animal.get_room_number());
+		Room *new_room = get_room(room_number);
+		if(new_room->get_capacity() == new_room->animal_count())
+			throw -3;
+		new_room->add_animal(get_animal(animal.get_name()));
+		old_room->remove_animal(animal.get_name());
 		animal.set_room_number(room_number);
+
+		cout << animal.get_name() << " has been successfully transferred to the room " << room_number << "." << endl;
+
 		return true;
-	} catch (int) {
-		cout << "Cannot transfer " << animal.get_name() << ". Room " << room_number << " is occupied." << endl;
+	} catch (int i) {
+		if(i == -1)
+			cout << "Cannot transfer " << animal.get_name() << ". Room " << room_number << " is occupied." << endl;
+		else if(i == -2)
+			cout << "Cannot transfer " << animal.get_name() << ". Room " << room_number << " does not exist in the hotel." << endl;
+		else
+			cout << "Cannot transfer " << animal.get_name() << ". Room " << room_number << " is full." << endl;
 		return false;
 	}
 }
@@ -204,11 +223,22 @@ Food* Hotel::get_food(const string& name) const {
 	return nullptr;
 }
 
+Room* Hotel::get_room(int number) const {
+	if(!contains_room(number)) return nullptr;
+
+	for(vector<Room*>::const_iterator iter = rooms->begin(); iter != rooms->end(); iter++)
+		if((*iter)->get_number() == number)
+			return *iter;
+	return nullptr;
+	
+}
+
 uint32_t Hotel::animal_count() const {
 	return animals->size();
 }
 
 bool Hotel::is_empty() const {
+	if(!animals || !foods || !rooms) return true;
 	return animals->empty();
 }
 
@@ -218,10 +248,7 @@ bool Hotel::room_occupied(const int room_number) const {
 		return false;
 	}
 
-	for (unsigned i = 0; i < animals->size(); ++i)
-		if (animals->at(i)->get_room_number() == room_number)
-			return true;
-	return false;
+	return get_room(room_number)->get_capacity() == get_room(room_number)->animal_count();
 }
 
 void Hotel::remove_animal(string name) const {
@@ -253,6 +280,10 @@ bool Hotel::remove_animal(Animal& animal) const {
 					if ((*it)->is_applicable_to(animal.get_name()))
 						(*it)->remove_applicable_animal(*iter);
 			}
+			// remove animal from the rooms vector as well
+			for(vector<Room*>::iterator it = rooms->begin(); it != rooms->end(); ++it)
+				if((*it)->get_number() == animal.get_room_number())
+					(*it)->remove_animal(animal.get_name());
 
 			delete *iter;
 			animals->erase(iter);
@@ -275,6 +306,12 @@ bool Hotel::contains(Food& food) const {
 
 	for (vector<Food*>::iterator iter = foods->begin(); iter != foods->end(); ++iter)
 		if (food.get_name().compare((*iter)->get_name()) == 0) return true;
+	return false;
+}
+
+bool Hotel::contains(Room &room) const {
+	for(vector<Room*>::iterator iter = rooms->begin(); iter != rooms->end(); ++iter)
+		if(*iter == &room) return true;
 	return false;
 }
 
@@ -335,6 +372,19 @@ void Hotel::register_food(string name, string applicable_animals) const {
 	register_food(f);
 }
 
+void Hotel::register_room(const int room_number) const {
+	if(!contains_room(room_number)) {
+		Room *room = new Room(room_number);
+		register_room(room);
+	}
+}
+void Hotel::register_room(const int room_number, const int capacity) const {
+	if(!contains_room(room_number)) {
+		Room *room = new Room(room_number, capacity);
+		register_room(room);
+	}
+}
+
 void Hotel::remove_food(const string name) const {
 	if (!contains_food(name)) {
 		cout << name << " could not removed. Hotel does not contain such food.";
@@ -344,7 +394,7 @@ void Hotel::remove_food(const string name) const {
 	cout << name << " has " << (remove_food(*get_food(name)) ? "" : "not") << " been removed from the hotel." << endl;
 }
 
-void Hotel::set_capacity(const int capacity) {
+void Hotel::set_capacity(const unsigned capacity) {
 	if (capacity < animal_count()) {
 		cout << "Cannot set capacity to " << capacity << ". Please enter a bigger value." << endl;
 		return;
@@ -363,6 +413,7 @@ void Hotel::transfer_animal(string name, const int room_number) const {
 		cout << "Cannot transfer animal " << name << ". Room number cannot be negative." << endl;
 		return;
 	}
+
 	if (contains_animal(name))
 		transfer_animal(*get_animal(name), room_number);
 	else
@@ -370,15 +421,11 @@ void Hotel::transfer_animal(string name, const int room_number) const {
 }
 
 void Hotel::modify(string name, const uint8_t age) const {
-	if (!contains_animal(name)) {
-		cout << "Unable to modify age of " << name << ". Hotel does not contain such an animal." << endl;
+	if(contains_animal(name)) {
+		get_animal(name)->set_age(age);
 		return;
 	}
-
-	if (!contains_animal(name))
-		get_animal(name)->set_age(age);
-	else
-		cout << "Cannot modify the age of animal " << name << ". Hotel does not contain such an animal." << endl;
+	cout << "Unable to modify age of " << name << ". Hotel does not contain such an animal." << endl;
 }
 
 void Hotel::modify(string name, const bool is_ill, const bool is_tired) const {
@@ -386,7 +433,7 @@ void Hotel::modify(string name, const bool is_ill, const bool is_tired) const {
 		get_animal(name)->set_is_ill(is_ill);
 		get_animal(name)->set_is_tired(is_tired);
 	} else {
-		cout << "Cannot modify animal " << name << ". Hotel does not contain such an animal." << endl;
+		cout << "Unable to modify animal " << name << ". Hotel does not contain such an animal." << endl;
 	}
 }
 
@@ -410,6 +457,10 @@ bool Hotel::feed_animal(string name) const {
 	if (!contains_animal(name)) {
 		cout << "Cannot feed animal " + name + ". Hotel does not contain such an animal." << endl;
 		return false;
+	}
+
+	if(!contains_food_for_animal(name)) {
+		cout << "Unable to feed " << name << ". Hotel does not contain such food." << endl;
 	}
 
 	bool fed = false;
@@ -456,21 +507,26 @@ void Hotel::print_food_memory_addresses() const {
 }
 
 Hotel& Hotel::operator=(const Hotel& hotel) {
-	animals = new vector<Animal*>;
-	foods = new vector<Food*>;
-
-	if (this != &hotel) {
+	if (this != &hotel && hotel.animals && hotel.foods && hotel.rooms) {
 		if (!is_empty()) clear();
 
+		capacity = hotel.capacity;
+		animals = new vector<Animal*>;
+		foods = new vector<Food*>;
+		rooms = new vector<Room*>;
 		
-		for(vector<Animal*>::const_iterator iter = hotel.animals->begin(); iter != hotel.animals->end(); iter++) {
-			//a = new Animal((*iter)->get_name(), (*iter)->get_dates(), (*iter)->get_age(), (*iter)->get_room_number(), (*iter)->get_happiness_level(), (*iter)->isIll(), (*iter)->isTired());
-			
+		for(vector<Animal*>::const_iterator iter = hotel.animals->begin(); iter != hotel.animals->end(); iter++)
 			animals->push_back(new Animal(**iter));
-		}
-		for(vector<Food*>::const_iterator iter = hotel.foods->begin(); iter != hotel.foods->end(); iter++) {
+		for(vector<Food*>::const_iterator iter = hotel.foods->begin(); iter != hotel.foods->end(); iter++)
 			foods->push_back(new Food(**iter));
+		for(vector<Room*>::const_iterator iter = hotel.rooms->begin(); iter != hotel.rooms->end(); iter++) {
+			vector<Animal*> *a = new vector<Animal*>;
+			for(vector<Animal*>::iterator it = (*iter)->get_animals()->begin(); it != (*iter)->get_animals()->end(); ++it)
+				a->push_back(get_animal((*it)->get_name()));
+
+			rooms->push_back(new Room(*a, (*iter)->get_number(), (*iter)->get_capacity()));
 		}
+
 	}
 
 	return *this;
@@ -581,13 +637,18 @@ ostream& operator<<(ostream& os, const Hotel& hotel) {
 	if (hotel.foods->empty()) {
 		cout << "Hotel does not contain any food." << endl;
 	} else {
-		for (vector<Food*>::iterator iter = hotel.foods->begin(); iter != hotel.foods->end(); ++iter) {
+		for (vector<Food*>::iterator iter = hotel.foods->begin(); iter != hotel.foods->end(); ++iter)
 			os << **iter;
-		}
+	}
+	cout << endl << "\t*********Rooms in the hotel*********" << endl;
+	if (hotel.rooms->empty()) {
+		cout << "Hotel does not have any rooms." << endl;
+	} else {
+		for (vector<Room*>::iterator iter = hotel.rooms->begin(); iter != hotel.rooms->end(); ++iter)
+			os << **iter;
 	}
 
 	cout << endl << "***********************************************************************************" << endl;
-	cout << endl;
 
 	return os;
 }
