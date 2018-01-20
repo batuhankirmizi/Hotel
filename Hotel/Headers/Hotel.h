@@ -26,6 +26,9 @@ class Hotel {
 	// clear all the elements
 	void clear() const;
 
+	// remove all the animals from the hotel
+	void remove_all_animals() const;
+
 	// register food to the hotel
 	void register_food(Food*) const;
 
@@ -75,29 +78,31 @@ public:
 
 	bool contains_animal(const string& name) const; // check if the hotel contains such an animal or not
 
-	bool contains_food(string& name) const; // check if the hotel contains such food or not
+	bool contains_food(string&) const; // checks if the hotel contains such food or not
 
-	bool contains_food(const string& name) const; // check if the hotel contains such food or not
+	bool contains_food(const string&) const; // checks if the hotel contains such food or not
+
+	bool contains_food_for_animal(const string& animal_name) const; // checks if the hotel contains food for the given animal
 
 	uint32_t animal_count() const; // returns the count of animals in the hotel
 
 	bool is_empty() const; // checks if the hotel is empty or not
 
-	bool room_occupied(int room_number) const; // checks if the such room with room number is occupied or not
+	bool room_occupied(int) const; // checks if the such room with room number is occupied or not
 
-	void remove_animal(string name) const; // removes the given animal from hotel
+	void remove_animal(string) const; // removes the given animal from hotel
 
-	void train(string name) const; // train the given animal
+	void train(string) const; // train the given animal
 
 	void train_all() const; // train all the animals inside the hotel
 
-	void rest(string name) const; // rest the given animal
+	void rest(string) const; // rest the given animal
 
 	void rest_all() const; // rest all the animals inside the hotel
 
 	bool feed_all() const; // feed all the animals inside the hotel
 
-	bool feed_animal(string name) const; // feed an animal
+	bool feed_animal(string) const; // feed an animal
 	
 	bool feed_animal(string name, const string food_name) const; // feed an animal with the given food name
 

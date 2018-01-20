@@ -44,7 +44,7 @@ public:
 		this->happiness_level = happiness_level <= 5 ? happiness_level : 3;
 	}
 
-	Animal(const Animal& animal); // copy constructor
+	Animal(const Animal&); // copy constructor
 
 							/**** GETTERS ****/
 	string get_name() const { return name; }
@@ -80,9 +80,7 @@ public:
 	void modify(int, int, int); // change the animal's age, happiness level and room number
 
 	bool operator==(const Animal& animal) const; // overloading the operator ==
-
 	Animal& operator=(const Animal& animal); // assignment operator
-
 	friend ostream& operator<<(ostream&, const Animal&); // overloading the operator <<
 };
 

@@ -1,22 +1,21 @@
 #include "../Headers/Food.h"
 
 void Food::clear() const {
-	applicable_animals->clear();
-	for(vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); iter++)
-		delete *iter;
 	animals->clear();
 }
 
 Food::Food(const string name) : name(name) {
-	applicable_animals = new vector<string>;
 	animals = new vector<Animal*>;
+	applicable_animals = new vector<string>;
 }
 
-Food::Food(const string name, const vector<string>& animals) : name(name) {
+Food::Food(const string name, vector<Animal*> animals) : name(name) {
+	this->animals = &animals;
 	applicable_animals = new vector<string>;
-	for (unsigned i = 0; i < animals.size(); ++i)
-		applicable_animals->push_back(animals.at(i));
-	this->animals = new vector<Animal*>;
+}
+
+Food::Food(const Food& food) {
+	*this = food;
 }
 
 Food::~Food() {
@@ -25,8 +24,8 @@ Food::~Food() {
 }
 
 bool Food::is_applicable_to(const string& animal_name) const {
-	for(unsigned int i = 0; i < applicable_animals->size(); ++i)
-		if(applicable_animals->at(i).compare(animal_name) == 0) return true;
+	for(vector<string>::const_iterator iter = applicable_animals->begin(); iter != applicable_animals->end(); iter++)
+		if((*iter).compare(animal_name) == 0) return true;
 	return false;
 }
 
@@ -37,25 +36,50 @@ bool Food::is_applicable_to(Animal* animal) const {
 	return false;
 }
 
-void Food::add_applicable_animal(const string& animal_name) const {
-	if(!is_applicable_to(animal_name))
-		applicable_animals->push_back(animal_name);
+void Food::add_applicable_animal(const string animal_name) const {
+	applicable_animals->push_back(animal_name);
 }
 
-void Food::add_applicable_animal(Animal * animal) const {
+void Food::add_applicable_animal(Animal *animal) const {
 	if(!is_applicable_to(animal))
 		animals->push_back(animal);
+}
+
+void Food::remove_applicable_animal(Animal *animal) const {
+	for(vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); iter++)
+		if(*iter == animal) {
+			animals->erase(iter);
+			return;
+		}
+}
+
+Food& Food::operator=(const Food& food) {
+	animals = new vector<Animal*>;
+	applicable_animals = new vector<string>;
+
+	if(this != &food) {
+		if(!animals->empty()) clear();
+
+		name = food.name;
+		for(vector<Animal*>::const_iterator iter = food.animals->begin(); iter != food.animals->end(); iter++)
+			animals->push_back(new Animal(**iter));
+		for(vector<string>::const_iterator iter = food.applicable_animals->begin(); iter != food.applicable_animals->end(); iter++)
+			applicable_animals->push_back(*iter);
+	}
+	return *this;
 }
 
 bool Food::operator==(const Food& food) const {
 	return name.compare(food.get_name()) == 0;
 }
 
+void Food::operator delete(void*) { }
+
 ostream& operator<<(ostream& os, const Food& food) {
 	os << food.get_name() << ": ";
-	for(unsigned i = 0; i < food.applicable_animals->size(); ++i) {
-		os << food.applicable_animals->at(i);
-		if(i != food.applicable_animals->size() - 1)
+	for(vector<Animal*>::const_iterator iter = food.animals->begin(); iter != food.animals->end(); iter++) {
+		os << (*iter)->get_name();
+		if(iter != food.animals->end() - 1)
 			os << ", ";
 	}
 	os << endl;

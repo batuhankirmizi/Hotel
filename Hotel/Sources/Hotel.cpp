@@ -6,7 +6,19 @@ void Hotel::init() {
 }
 
 void Hotel::clear() const {
+	for (vector<Food*>::iterator iter = foods->begin(); iter != foods->end(); iter++) delete *iter;
 	foods->clear();
+
+	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); iter++) delete *iter;
+	animals->clear();
+}
+
+void Hotel::remove_all_animals() const {
+	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); iter++) {
+		for (vector<Food*>::iterator it = foods->begin(); it != foods->end(); it++)
+			(*it)->remove_applicable_animal(*iter);
+		delete *iter;
+	}
 	animals->clear();
 }
 
@@ -61,7 +73,7 @@ Hotel::Hotel(vector<Animal*>& anims, const int capacity) : capacity(capacity) {
 		animals->push_back(*iter);
 	foods = new vector<Food*>;
 
-	if(capacity < 0)
+	if (capacity < 0)
 		this->capacity = 0;
 }
 
@@ -125,7 +137,14 @@ bool Hotel::contains_food(string& name) const {
 
 bool Hotel::contains_food(const string& name) const {
 	return get_food(name) ? contains(*get_food(name)) : false;
-	
+
+}
+
+bool Hotel::contains_food_for_animal(const string& animal_name) const {
+	for (vector<Food*>::const_iterator iter = foods->begin(); iter != foods->end(); iter++)
+		if ((*iter)->is_applicable_to(animal_name))
+			return true;
+	return false;
 }
 
 bool Hotel::remove_food(Food& food) const {
@@ -159,28 +178,28 @@ Animal* Hotel::get_animal(string& name) const {
 }
 
 Animal* Hotel::get_animal(const string& name) const {
-	if(name.compare("") == 0) return nullptr;
+	if (name.compare("") == 0) return nullptr;
 
-	for(vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); ++iter)
-		if(name.compare((*iter)->get_name()) == 0)
+	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); ++iter)
+		if (name.compare((*iter)->get_name()) == 0)
 			return *iter;
 	return nullptr;
 }
 
 Food* Hotel::get_food(string& name) const {
-	if(name.compare("") == 0) return nullptr;
+	if (name.compare("") == 0) return nullptr;
 
-	for(vector<Food*>::const_iterator iter = foods->begin(); iter != foods->end(); iter++)
-		if((*iter)->get_name().compare(name) == 0)
+	for (vector<Food*>::const_iterator iter = foods->begin(); iter != foods->end(); iter++)
+		if ((*iter)->get_name().compare(name) == 0)
 			return *iter;
 	return nullptr;
 }
 
 Food* Hotel::get_food(const string& name) const {
-	if(name.compare("") == 0) return nullptr;
+	if (name.compare("") == 0) return nullptr;
 
-	for(vector<Food*>::const_iterator iter = foods->begin(); iter != foods->end(); iter++)
-		if((*iter)->get_name().compare(name) == 0)
+	for (vector<Food*>::const_iterator iter = foods->begin(); iter != foods->end(); iter++)
+		if ((*iter)->get_name().compare(name) == 0)
 			return *iter;
 	return nullptr;
 }
@@ -194,7 +213,7 @@ bool Hotel::is_empty() const {
 }
 
 bool Hotel::room_occupied(const int room_number) const {
-	if(room_number < 0) {
+	if (room_number < 0) {
 		cout << "You entered negative room number." << endl;
 		return false;
 	}
@@ -224,10 +243,17 @@ void Hotel::remove_animal(string name) const {
 }
 
 bool Hotel::remove_animal(Animal& animal) const {
-	if(!contains_animal(animal.get_name())) return false;
+	if (!contains_animal(animal.get_name())) return false;
 
 	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); ++iter)
 		if (*iter == &animal) {
+			// remove animal from the foods vector also if foods has a food that can be applied to this animal
+			if (contains_food_for_animal(animal.get_name())) {
+				for (vector<Food*>::iterator it = foods->begin(); it != foods->end(); ++it)
+					if ((*it)->is_applicable_to(animal.get_name()))
+						(*it)->remove_applicable_animal(*iter);
+			}
+
 			delete *iter;
 			animals->erase(iter);
 			return true;
@@ -236,7 +262,7 @@ bool Hotel::remove_animal(Animal& animal) const {
 }
 
 bool Hotel::contains(Animal& animal) const {
-	if(animal.get_name().compare("") == 0) return false;
+	if (animal.get_name().compare("") == 0) return false;
 
 	for (vector<Animal*>::iterator iter = animals->begin(); iter != animals->end(); ++iter)
 		if (animal.get_name().compare((*iter)->get_name()) == 0)
@@ -245,10 +271,10 @@ bool Hotel::contains(Animal& animal) const {
 }
 
 bool Hotel::contains(Food& food) const {
-	if(food.get_name().compare("") == 0) return false;
+	if (food.get_name().compare("") == 0) return false;
 
-	for(vector<Food*>::iterator iter = foods->begin(); iter != foods->end(); ++iter)
-		if(food.get_name().compare((*iter)->get_name()) == 0) return true;
+	for (vector<Food*>::iterator iter = foods->begin(); iter != foods->end(); ++iter)
+		if (food.get_name().compare((*iter)->get_name()) == 0) return true;
 	return false;
 }
 
@@ -266,7 +292,7 @@ void Hotel::train(string name) const {
 	if (is_empty())
 		cout << "Hotel is empty. Cannot train any animal." << endl;
 	else {
-		if(contains_animal(name))
+		if (contains_animal(name))
 			get_animal(name)->do_exercise();
 		else cout << "Cannot rest " << name << ". Hotel does not contain such an aniaml." << endl;
 	}
@@ -287,21 +313,19 @@ void Hotel::rest(string name) const {
 		cout << "Hotel is empty. Cannot rest any animal." << endl;
 	else {
 		if (contains_animal(name)) get_animal(name)->rest();
-		else cout << "Cannot rest " << name << ". Hotel does not contain such an aniaml." << endl;
+		else cout << "Cannot rest " << name << ". Hotel does not contain such an animal." << endl;
 	}
 }
 
 void Hotel::register_food(string name, string applicable_animals) const {
-	Food *f = contains_food(name) ? get_food(name) : new Food(name);
+	Food* f = contains_food(name) ? get_food(name) : new Food(name);
 
 	string to_add = "";
 	applicable_animals += " ";
 	for (unsigned i = 0; i < applicable_animals.length(); ++i) {
 		if (applicable_animals.at(i) == ' ') {
-			if(!f->is_applicable_to(to_add))
-				f->add_applicable_animal(to_add);
-			if (!contains_animal(name))
-				f->add_applicable_animal(get_animal(to_add));
+			if (!f->is_applicable_to(to_add)) f->add_applicable_animal(to_add);
+			if (contains_animal(to_add)) f->add_applicable_animal(get_animal(to_add));
 			to_add = "";
 			continue;
 		}
@@ -321,7 +345,7 @@ void Hotel::remove_food(const string name) const {
 }
 
 void Hotel::set_capacity(const int capacity) {
-	if(capacity < animal_count()) {
+	if (capacity < animal_count()) {
 		cout << "Cannot set capacity to " << capacity << ". Please enter a bigger value." << endl;
 		return;
 	}
@@ -330,7 +354,7 @@ void Hotel::set_capacity(const int capacity) {
 }
 
 void Hotel::display_info(string name) const {
-	if(contains_animal(name))
+	if (contains_animal(name))
 		cout << *get_animal(name) << endl;
 }
 
@@ -346,7 +370,7 @@ void Hotel::transfer_animal(string name, const int room_number) const {
 }
 
 void Hotel::modify(string name, const uint8_t age) const {
-	if(!contains_animal(name)) {
+	if (!contains_animal(name)) {
 		cout << "Unable to modify age of " << name << ". Hotel does not contain such an animal." << endl;
 		return;
 	}
@@ -378,27 +402,27 @@ bool Hotel::feed_all() const {
 }
 
 bool Hotel::feed_animal(string name) const {
-		if(is_empty()) {
-			cout <<  "Hotel is empty. Cannot feed any animals." << endl;
-			return false;
-		}
+	if (is_empty()) {
+		cout << "Hotel is empty. Cannot feed any animals." << endl;
+		return false;
+	}
 
-		if(!contains_animal(name)) {
-			cout << "Cannot feed animal " + name + ". Hotel does not contain such an animal." << endl;
-			return false;
-		}
+	if (!contains_animal(name)) {
+		cout << "Cannot feed animal " + name + ". Hotel does not contain such an animal." << endl;
+		return false;
+	}
 
 	bool fed = false;
-	Animal *animal = get_animal(name);
-	for(vector<Food*>::iterator iter = foods->begin(); iter != foods->end(); iter++)
-		if(animal->feed(**iter))
+	Animal* animal = get_animal(name);
+	for (vector<Food*>::iterator iter = foods->begin(); iter != foods->end(); iter++)
+		if (animal->feed(**iter))
 			fed = true;
 	return fed;
 }
 
 bool Hotel::feed_animal(string name, string food_name) const {
-	if(contains(*get_animal(name))) {
-		if(contains(*get_food(food_name)))
+	if (contains(*get_animal(name))) {
+		if (contains(*get_food(food_name)))
 			get_animal(name)->feed(*get_food(food_name));
 		cout << "Unable to feed animal " << name << ". Hotel does not contain such food." << endl;
 		return false;
@@ -438,12 +462,15 @@ Hotel& Hotel::operator=(const Hotel& hotel) {
 	if (this != &hotel) {
 		if (!is_empty()) clear();
 
-		for (unsigned i = 0, j = 0; i < hotel.animals->size(); ++i, j++) {
-			animals->push_back(hotel.animals->at(i));
-			if (j < hotel.foods->size())
-				foods->push_back(hotel.foods->at(j));
+		
+		for(vector<Animal*>::const_iterator iter = hotel.animals->begin(); iter != hotel.animals->end(); iter++) {
+			//a = new Animal((*iter)->get_name(), (*iter)->get_dates(), (*iter)->get_age(), (*iter)->get_room_number(), (*iter)->get_happiness_level(), (*iter)->isIll(), (*iter)->isTired());
+			
+			animals->push_back(new Animal(**iter));
 		}
-		capacity = hotel.capacity;
+		for(vector<Food*>::const_iterator iter = hotel.foods->begin(); iter != hotel.foods->end(); iter++) {
+			foods->push_back(new Food(**iter));
+		}
 	}
 
 	return *this;
@@ -451,12 +478,12 @@ Hotel& Hotel::operator=(const Hotel& hotel) {
 
 void Hotel::operator--(int) const {
 	if (!is_empty())
-		remove_animal(*(animals->back()));
+		remove_animal(*animals->back());
 }
 
 void Hotel::operator--() const {
 	if (!is_empty())
-		remove_animal(*(animals->back()));
+		remove_animal(*animals->back());
 }
 
 void Hotel::operator++(int) {
@@ -469,14 +496,15 @@ void Hotel::operator++() {
 
 void Hotel::operator-=(const unsigned x) const {
 	try {
-		if(x > animal_count()) {
+		if (x > animal_count()) {
 			string s;
-			switch(x) {
-				case 1: s = "";
-					break;
-				default: s = "s";
+			switch (x) {
+			case 1: s = "";
+				break;
+			default: s = "s";
 			}
-			throw "Cannot remove " + to_string(x) + " animal" + s + " from hotel. Hotel contains only " + to_string(animal_count()) +
+			throw "Cannot remove " + to_string(x) + " animal" + s + " from hotel. Hotel contains only " +
+				to_string(animal_count()) +
 				" animals.";
 		}
 
@@ -486,7 +514,7 @@ void Hotel::operator-=(const unsigned x) const {
 		cout << str << endl;
 		return;
 	} catch (unsigned int) {
-		animals->clear();
+		remove_all_animals();
 		cout << "Removed all the animals from hotel." << endl;
 		return;
 	}

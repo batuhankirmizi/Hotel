@@ -91,6 +91,8 @@ bool Animal::operator==(const Animal& animal) const {
 }
 
 Animal& Animal::operator=(const Animal& animal) {
+	/**this = Animal(animal.get_name(), animal.get_dates(), animal.get_age(), animal.get_room_number(), animal.get_happiness_level(), animal.isIll(), animal.isTired());
+	return *this;*/
 	if(this != &animal) {
 		name = animal.get_name();
 		dates = animal.get_dates();
