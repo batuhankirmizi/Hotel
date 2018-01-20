@@ -17,6 +17,9 @@ class Hotel {
 	// vector which contains all the foods inside the hotel
 	vector<Food*>* foods;
 
+	// initialize animals and foods vectors
+	void init();
+
 	// animal capacity of this hotel
 	unsigned int capacity;
 
@@ -61,15 +64,14 @@ public:
 	explicit Hotel(vector<Animal*>&); // constructor with animals
 	explicit Hotel(vector<Food*>&); // constructor with foods
 	Hotel(vector<Animal*>&, vector<Food*>&); // constructor with animals and foods
-	Hotel(vector<Animal*>&, uint32_t); // constructor with both properties
+	Hotel(vector<Animal*>&, int); // constructor with both properties
 	Hotel(const Hotel&); // copy constructor
 	~Hotel(); // destructor
 
 	// add animal to the hotel
 	void add_animal(const string& name, const string& dates, const unsigned age, const unsigned room_number) const;
-	void add_animal(const string& name, const string& dates, const unsigned age, const unsigned room_number,
-	                const unsigned happiness_level,
-	                const bool is_ill, const bool is_tired) const;
+	void add_animal(const string& name, const string& dates, const unsigned age, const unsigned room_number, const unsigned happiness_level,
+					const bool is_ill, const bool is_tired) const;
 
 	bool contains_animal(const string& name) const; // check if the hotel contains such an animal or not
 
@@ -105,6 +107,8 @@ public:
 
 	void set_capacity(int capacity); // setter to variable capacity
 
+	void display_info(string name) const; // displays the info about the given animal
+
 	void transfer_animal(string name, int room_number) const; // transfer the animal into another room
 
 	void modify(string name, uint8_t age) const; // change the age of the animal
@@ -114,6 +118,7 @@ public:
 	void print_animal_memory_addresses() const;
 	void print_food_memory_addresses() const;
 
+		         /**** OPERATOR OVERLOADING ****/
 	Hotel& operator=(const Hotel&); // assignment operator
 	void operator--(int) const; // removes the last animal
 	void operator--() const; // removes the last animal

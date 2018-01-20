@@ -80,6 +80,10 @@ int main(int argc, char* argv[]) {
 	h2.transfer_animal("ABC", 504);
 	h2.transfer_animal("", 504);
 
+	cout << "\n\t\t*********DISPLAY INFO*************" << endl;
+	h2.display_info("Dog");
+	h2.display_info("");
+
 	h2.add_animal("Animal", "15/02/2018 - 26/05/2021", 6, 6007, 0, false, false);
 	h2.register_food("ASD", "Animal");
 	cout << h2 << endl;

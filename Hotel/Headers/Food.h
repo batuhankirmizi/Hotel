@@ -10,8 +10,8 @@
 using namespace std;
 
 class Food {
-	vector<string>* applicable_animals; // vector of animals which this food can be applied
-	vector<Animal*>* animals; // vector of pointer to animals which this food can be applied 
+	vector<string> *applicable_animals; // vector of animals which this food can be applied
+	vector<Animal*> *animals; // vector of pointer to animals which this food can be applied 
 	string name; // name of the food
 
 	// clear

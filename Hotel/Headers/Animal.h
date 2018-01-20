@@ -46,7 +46,7 @@ public:
 
 	Animal(const Animal& animal); // copy constructor
 
-	/**** GETTERS ****/
+							/**** GETTERS ****/
 	string get_name() const { return name; }
 	string get_dates() const { return dates; }
 	unsigned get_age() const { return age; }
@@ -55,7 +55,7 @@ public:
 	bool isIll() const { return is_ill; }
 	bool isTired() const { return is_tired; }
 
-	/**** SETTERS ****/
+	                        /**** SETTERS ****/
 	void set_name(const string& name) { this->name = name; }
 	void set_dates(const string& dates) { this->dates = dates; }
 

@@ -1,5 +1,10 @@
 #include "../Headers/Hotel.h"
 
+void Hotel::init() {
+	animals = new vector<Animal*>;
+	foods = new vector<Food*>;
+}
+
 void Hotel::clear() const {
 	foods->clear();
 	animals->clear();
@@ -51,10 +56,13 @@ Hotel::Hotel(vector<Animal*>& anims, vector<Food*>& f) {
 		foods->push_back(*iter);
 }
 
-Hotel::Hotel(vector<Animal*>& anims, const uint32_t capacity) : capacity(capacity) {
+Hotel::Hotel(vector<Animal*>& anims, const int capacity) : capacity(capacity) {
 	for (vector<Animal*>::iterator iter = anims.begin(); iter != anims.end(); ++iter)
 		animals->push_back(*iter);
 	foods = new vector<Food*>;
+
+	if(capacity < 0)
+		this->capacity = 0;
 }
 
 Hotel::Hotel(const Hotel& hotel) {
@@ -313,7 +321,17 @@ void Hotel::remove_food(const string name) const {
 }
 
 void Hotel::set_capacity(const int capacity) {
+	if(capacity < animal_count()) {
+		cout << "Cannot set capacity to " << capacity << ". Please enter a bigger value." << endl;
+		return;
+	}
+
 	this->capacity = capacity;
+}
+
+void Hotel::display_info(string name) const {
+	if(contains_animal(name))
+		cout << *get_animal(name) << endl;
 }
 
 void Hotel::transfer_animal(string name, const int room_number) const {
