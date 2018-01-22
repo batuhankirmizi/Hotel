@@ -408,6 +408,29 @@ void Hotel::display_info(string name) const {
 		cout << *get_animal(name) << endl;
 }
 
+void Hotel::display_info(const int info) const {
+	switch(info) {
+		case 0:
+			for(vector<Animal*>::const_iterator iter = animals->begin(); iter != animals->end(); iter++)
+				cout << **iter << endl;
+			cout << endl;
+			break;
+		case 1:
+			for(vector<Food*>::const_iterator iter = foods->begin(); iter != foods->end(); iter++)
+				cout << **iter;
+			cout << endl;
+			break;
+		case 2:
+			for(vector<Room*>::const_iterator iter = rooms->begin(); iter != rooms->end(); iter++)
+				cout << **iter;
+			cout << endl;
+			break;
+		default:
+			cout << "Please enter 0 for animals, 1 for foods and 2 for rooms." << endl;
+			break;
+	}
+}
+
 void Hotel::transfer_animal(string name, const int room_number) const {
 	if (room_number < 0) {
 		cout << "Cannot transfer animal " << name << ". Room number cannot be negative." << endl;

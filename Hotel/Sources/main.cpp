@@ -94,6 +94,9 @@ int main(int argc, char* argv[]) {
 	cout << "\n\t\t*********DISPLAY INFO*************" << endl;
 	h2.display_info("Dog");
 	h2.display_info("");
+	h2.display_info(0);
+	h2.display_info(2);
+	h2.display_info(3);
 
 	h2.register_room(6007);
 	h2.add_animal("Animal", "15/02/2018 - 26/05/2021", 6, 6007, 0, false, false);

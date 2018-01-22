@@ -128,7 +128,9 @@ public:
 
 	void set_capacity(unsigned capacity); // setter to variable capacity
 
-	void display_info(string name) const; // displays the info about the given animal
+	void display_info(string animal_name) const; // displays the info about the given animal
+	
+	void display_info(int) const; // displays the info about animals(0), foods(1) or rooms(2)
 
 	void transfer_animal(string name, int room_number) const; // transfer the animal into another room
 
