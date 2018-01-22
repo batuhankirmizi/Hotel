@@ -23,7 +23,7 @@ public:
 	explicit Room(vector<Animal*>&, const int number, const int capacity);
 	Room(const Room&); // copy constructor
 
-	vector<Animal*>* get_animals() { return animals; }
+	vector<Animal*>* get_animals() const { return animals; }
 
 	int get_capacity() const { return capacity; }
 
